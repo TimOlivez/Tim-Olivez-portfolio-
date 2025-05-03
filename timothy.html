@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Next‑Gen Portfolio – KABUGO TIMOTHY</title>
+  <meta name="description" content="An ultra-modern portfolio website showcasing creative projects, skills, services, certifications, GitHub repos, and more.">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* ===== Global Variables & Resets ===== */
+    :root {
+      --primary: #0072ff;
+      --secondary: #00c6ff;
+      --light: #f2f2f2;
+      --dark: #121212;
+      --text-color: #333;
+    }
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: var(--light);
+      color: var(--text-color);
+      line-height: 1.6;
+      scroll-behavior: smooth;
+      overflow-x: hidden;
+    }
+    a { text-decoration: none; color: inherit; }
+    
+    /* ===== Header (Minimal) ===== */
+    header {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      height: 60px;
+      background: rgba(255,255,255,0.97);
+      display: flex;
+      align-items: center;
+      padding: 0 20px;
+      z-index: 2000;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    header .logo {
+      font-size: 1.8rem;
+      font-weight: 600;
+      color: var(--primary);
+    }
+    
+    /* ===== Radial Navigation (Plus Button) ===== */
+    .radial-menu {
+      position: fixed;
+      bottom: 40px;
+      right: 40px;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 2000;
+      transition: background 0.3s;
+    }
+    .radial-menu:hover { background: var(--secondary); }
+    .radial-menu i { color: #fff; font-size: 1.5rem; }
+    .radial-items {
+      position: fixed;
+      bottom: 70px;
+      right: 70px;
+      width: 200px;
+      height: 200px;
+      pointer-events: none;
+      z-index: 1900;
+    }
+    .radial-item {
+      position: absolute;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      transition: transform 0.4s, opacity 0.4s;
+      opacity: 0;
+      pointer-events: auto;
+    }
+    .radial-item:hover { background: var(--secondary); }
+    .radial-items.open .item1 { transform: translate(-80px, -80px); opacity: 1; }
+    .radial-items.open .item2 { transform: translate(0, -110px); opacity: 1; }
+    .radial-items.open .item3 { transform: translate(80px, -80px); opacity: 1; }
+    .radial-items.open .item4 { transform: translate(110px, 0); opacity: 1; }
+    .radial-items.open .item5 { transform: translate(80px, 80px); opacity: 1; }
+    .radial-items.open .item6 { transform: translate(0, 110px); opacity: 1; }
+    .radial-items.open .item7 { transform: translate(-80px, 80px); opacity: 1; }
+    .radial-items.open .item8 { transform: translate(-110px, 0); opacity: 1; }
+    
+    /* ===== Back-to-Top Button ===== */
+    .back-to-top {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      background: var(--primary);
+      color: #fff;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      opacity: 0;
+      transition: opacity 0.3s;
+      z-index: 1500;
+    }
+    .back-to-top.visible { opacity: 1; }
+    
+    /* ===== Hero Section ===== */
+    .hero {
+      height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      padding: 0 5%;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%; height: 100%;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      opacity: 0.85;
+      z-index: -2;
+      animation: gradientShift 10s linear infinite;
+    }
+    @keyframes gradientShift {
+      0%, 100% { filter: hue-rotate(0deg); }
+      50% { filter: hue-rotate(30deg); }
+    }
+    .hero::after {
+      content: "";
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: url('https://source.unsplash.com/1600x900/?abstract') no-repeat center/cover;
+      opacity: 0.2;
+      z-index: -1;
+      transform: scale(1.1);
+    }
+    .hero .left, .hero .right { padding: 20px; }
+    .hero .left {
+      text-align: left;
+    }
+    .hero .left h1 {
+      font-size: 3.8rem;
+      margin-bottom: 20px;
+      color: #fff;
+      text-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+    }
+    .hero .left p {
+      font-size: 1.3rem;
+      margin-bottom: 30px;
+      color: #eee;
+    }
+    .hero .left button {
+      padding: 12px 30px;
+      background: #fff;
+      border: none;
+      border-radius: 30px;
+      font-size: 1.1rem;
+      color: var(--primary);
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .hero .left button:hover { background: #f0f0f0; }
+    .hero .right {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .hero .right img {
+      max-width: 100%;
+      border-radius: 20px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    }
+    
+    /* ===== Section Base ===== */
+    section { padding: 100px 5%; text-align: center; }
+    section h2 {
+      font-size: 2.8rem;
+      margin-bottom: 20px;
+      color: var(--primary);
+    }
+    section p {
+      max-width: 800px;
+      margin: 0 auto 40px;
+      font-size: 1.1rem;
+    }
+    
+    /* ===== About Section ===== */
+    #about .profile {
+      margin: 40px auto;
+      width: 100px;
+      height: 100px;
+      border-radius: 70%;
+      overflow: hidden;
+      border: 2px solid var(--primary);
+    }
+    #about .profile img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    /* ===== Skills Section (Circular Progress) ===== */
+    #skills .skill-list {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 40px;
+    }
+    .circular-progress {
+      position: relative;
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: conic-gradient(var(--primary) 0deg, #ddd 0deg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: white;
+    }
+    .circular-progress::before {
+      content: attr(data-percentage) "%";
+      position: absolute;
+      z-index: 2;
+    }
+    
+    /* ===== Projects Section (Card Flip) ===== */
+    #projects .project-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      padding: 20px;
+    }
+    .project-card { perspective: 1000px; }
+    .project-card-inner {
+      position: relative;
+      width: 100%;
+      height: 0;
+      padding-bottom: 70%;
+      transition: transform 0.8s;
+      transform-style: preserve-3d;
+    }
+    .project-card:hover .project-card-inner { transform: rotateY(180deg); }
+    .project-card-front, .project-card-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    }
+    .project-card-front { background: #fff; }
+    .project-card-front img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .project-card-back {
+      background: var(--primary);
+      color: #fff;
+      transform: rotateY(180deg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 15px;
+      text-align: center;
+    }
+    
+    /* ===== Timeline Section ===== */
+    #timeline .timeline-container {
+      position: relative;
+      max-width: 700px;
+      margin: auto;
+      padding: 40px 0;
+    }
+    #timeline .timeline-container::after {
+      content: "";
+      position: absolute;
+      width: 4px;
+      background: var(--primary);
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    #timeline .timeline-item {
+      padding: 20px 30px;
+      background: #fff;
+      border-radius: 8px;
+      width: 45%;
+      position: relative;
+      margin: 20px 0;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    #timeline .timeline-item.left { left: 0; text-align: right; }
+    #timeline .timeline-item.right { left: 55%; text-align: left; }
+    #timeline .timeline-item::after {
+      content: "";
+      position: absolute;
+      top: 20px;
+      width: 20px;
+      height: 20px;
+      background: var(--primary);
+      border-radius: 50%;
+      z-index: 1;
+    }
+    #timeline .timeline-item.left::after { right: -10px; }
+    #timeline .timeline-item.right::after { left: -10px; }
+    
+    /* ===== Testimonials Section ===== */
+    #testimonials .testimonial-slider {
+      position: relative;
+      max-width: 600px;
+      margin: auto;
+      overflow: hidden;
+    }
+    #testimonials .testimonial-slide {
+      opacity: 0;
+      transition: opacity 0.8s;
+      position: absolute;
+      width: 100%;
+    }
+    #testimonials .testimonial-slide.active {
+      opacity: 1;
+      position: relative;
+    }
+    #testimonials .testimonial-slide p { font-style: italic; margin-bottom: 10px; }
+    #testimonials .testimonial-slide h5 {
+      color: var(--primary);
+      font-weight: 600;
+    }
+    
+    /* ===== Services Section ===== */
+    #services .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 30px;
+    }
+    #services .service-card {
+      background: #fff;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      transition: transform 0.3s;
+    }
+    #services .service-card:hover { transform: translateY(-5px); }
+    #services .service-card i {
+      font-size: 3rem;
+      color: var(--primary);
+      margin-bottom: 15px;
+    }
+    
+    /* ===== Certifications Section ===== */
+    #certifications .certifications-list {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+    }
+    #certifications .cert-card {
+      background: #fff;
+      border: 2px solid var(--primary);
+      border-radius: 8px;
+      padding: 15px 20px;
+      width: 250px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      transition: transform 0.3s;
+    }
+    #certifications .cert-card:hover { transform: translateY(-5px); }
+    #certifications .cert-card h4 {
+      font-size: 1.3rem;
+      margin-bottom: 8px;
+      color: var(--primary);
+    }
+    #certifications .cert-card p { font-size: 0.9rem; color: #666; }
+    
+    /* ===== GitHub Repos Section ===== */
+    #github-repos .repo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      padding: 20px;
+    }
+    #github-repos .repo-card {
+      background: #fff;
+      border-radius: 8px;
+      padding: 15px;
+      border: 1px solid #eee;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      transition: transform 0.3s;
+    }
+    #github-repos .repo-card:hover { transform: translateY(-5px); }
+    #github-repos .repo-card h4 {
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+      color: var(--primary);
+    }
+    #github-repos .repo-card p {
+      font-size: 0.9rem;
+      color: #555;
+      margin-bottom: 10px;
+    }
+    #github-repos .repo-card a {
+      display: inline-block;
+      padding: 8px 15px;
+      background: var(--primary);
+      color: #fff;
+      border-radius: 5px;
+      transition: background 0.3s;
+    }
+    #github-repos .repo-card a:hover { background: var(--secondary); }
+    
+    /* ===== Contact Section ===== */
+    #contact .contact-form {
+      max-width: 500px;
+      margin: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+    #contact .contact-form input,
+    #contact .contact-form textarea {
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 1rem;
+    }
+    #contact .contact-form button {
+      padding: 12px;
+      border: none;
+      background: var(--primary);
+      color: #fff;
+      font-size: 1.1rem;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    #contact .contact-form button:hover { background: var(--secondary); }
+    
+    /* ===== Social Section ===== */
+    #social .social-icons a {
+      margin: 0 10px;
+      font-size: 2rem;
+      color: var(--primary);
+      transition: color 0.3s;
+    }
+    #social .social-icons a:hover { color: var(--secondary); }
+    
+    /* ===== Footer ===== */
+    footer {
+      background: var(--primary);
+      color: #fff;
+      padding: 20px;
+      text-align: center;
+    }
+    
+    /* ===== Responsive Styles ===== */
+    @media (max-width: 768px) {
+      .hero { grid-template-columns: 1fr; text-align: center; }
+      .hero .left { padding: 20px 10px; }
+      .hero .left h1 { font-size: 2.8rem; }
+      .hero .left p { font-size: 1rem; }
+      .hero .right { display: none; }
+      #timeline .timeline-item { width: 90%; margin: 20px auto; }
+      #timeline .timeline-item.right { left: 5%; }
+      #skills .skill-list { flex-direction: column; }
+      section { padding: 80px 5%; }
+      header .logo { font-size: 1.6rem; }
+      .radial-menu { width: 50px; height: 50px; bottom: 20px; right: 20px; }
+      .radial-menu i { font-size: 1.3rem; }
+      .radial-items { width: 160px; height: 160px; bottom: 40px; right: 40px; }
+      .back-to-top { width: 40px; height: 40px; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <div class="logo">TM</div>
+  </header>
+  
+  <!-- Radial Navigation Menu (Plus Button) -->
+  <div class="radial-menu" id="radialToggle">
+    <i class="fas fa-plus"></i>
+  </div>
+  <div class="radial-items" id="radialItems">
+    <a href="#hero" class="radial-item item1" title="Home"><i class="fas fa-home"></i></a>
+    <a href="#about" class="radial-item item2" title="About"><i class="fas fa-user"></i></a>
+    <a href="#skills" class="radial-item item3" title="Skills"><i class="fas fa-chart-bar"></i></a>
+    <a href="#projects" class="radial-item item4" title="Projects"><i class="fas fa-th-large"></i></a>
+    <a href="#timeline" class="radial-item item5" title="Timeline"><i class="fas fa-history"></i></a>
+    <a href="#testimonials" class="radial-item item6" title="Testimonials"><i class="fas fa-comment-dots"></i></a>
+    <a href="#services" class="radial-item item7" title="Services"><i class="fas fa-cogs"></i></a>
+    <a href="#certifications" class="radial-item item8" title="Certifications"><i class="fas fa-certificate"></i></a>
+  </div>
+  
+  <!-- Back-to-Top Button -->
+  <div class="back-to-top" id="backToTop"><i class="fas fa-arrow-up"></i></div>
+  
+  <!-- Hero Section -->
+  <section class="hero" id="hero">
+    <div class="left">
+      <h1>Hi, I'm KABUGO TIMOTHY A.K.A Tim Olivez</h1>
+      <p>A Passionate Designer &amp; Developer crafting digital experiences that inspire.</p>
+      <button onclick="scrollToSection('projects')">
+        Discover My Work <i class="fas fa-arrow-down"></i>
+      </button>
+    </div>
+    <div class="right">
+      <img src="tim.jpg" alt="Hero Image">
+    </div>
+  </section>
+  
+  <!-- About Section -->
+  <section id="about">
+    <h2>About Me</h2>
+    <p>I combine creativity with technical expertise to bring digital experiences to life. My journey is fueled by passion, innovation, and a relentless drive for excellence.</p>
+    <div class="profile">
+      <img src="tim.jpg" alt="Profile Picture">
+    </div>
+    <p>From freelance projects to collaborating with top brands, I use my skills and unique vision to help businesses tell their story.</p>
+  </section>
+  
+  <!-- Skills Section -->
+  <section id="skills">
+  <h2>My Skills</h2>
+  <div class="skill-list">
+    <div class="skill-item">
+      <div class="circular-progress" data-percentage="90">90%</div>
+      <p>HTML/CSS</p>
+    </div>
+    <div class="skill-item">
+      <div class="circular-progress" data-percentage="85">55%</div>
+      <p>JavaScript</p>
+    </div>
+    <div class="skill-item">
+      <div class="circular-progress" data-percentage="80">70%</div>
+      <p>Python</p>
+    </div>
+    <div class="skill-item">
+      <div class="circular-progress" data-percentage="95">90%</div>
+      <p>Mysql database</p>
+    </div>
+    <div class="skill-item">
+      <div class="circular-progress" data-percentage="95">50%</div>
+      <p>React</p>
+    </div>
+  </div>
+</section>
+
+  
+  <!-- Projects Section -->
+  <section id="projects">
+    <h2>Projects</h2>
+    <p>Explore my innovative projects that blend creativity and technology.</p>
+    <input type="text" id="projectSearch" placeholder="Search Projects">
+    <div class="project-grid">
+      <div class="project-card">
+        <div class="project-card-inner">
+          <div class="project-card-front">
+            <img src="https://via.placeholder.com/300x200" alt="Project 1">
+          </div>
+          <div class="project-card-back">
+            <p>Project 1: A modern, responsive website built with cutting-edge design principles.</p>
+          </div>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="project-card-inner">
+          <div class="project-card-front">
+            <img src="https://via.placeholder.com/300x200" alt="Project 2">
+          </div>
+          <div class="project-card-back">
+            <p>Project 2: A dynamic web application showcasing smooth interactions and intuitive UX.</p>
+          </div>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="project-card-inner">
+          <div class="project-card-front">
+            <img src="https://via.placeholder.com/300x200" alt="Project 3">
+          </div>
+          <div class="project-card-back">
+            <p>Project 3: A creative design project that redefines user engagement.</p>
+          </div>
+        </div>
+      </div>
+      <!-- Additional project cards can be added here -->
+    </div>
+  </section>
+  
+  <!-- Timeline Section -->
+  <section id="timeline">
+    <h2>My Journey</h2>
+    <div class="timeline-container">
+      <div class="timeline-item left">
+        <h4>2021</h4>
+        <p>Started as a freelance web designer.</p>
+      </div>
+      <div class="timeline-item right">
+        <h4>2022</h4>
+        <p>Built impactful projects for local businesses.</p>
+      </div>
+      <div class="timeline-item left">
+        <h4>2023</h4>
+        <p>started online advertising and lyrics writing on digital platforms</p>
+      </div>
+      <div class="timeline-item right">
+        <h4>2024</h4>
+        <p>Partnered with a tech startup to drive digital transformation.</p>
+      </div>
+      <div class="timeline-item left">
+        <h4>2024</h4>
+        <p>Launched my own agency delivering next-gen digital solutions.</p>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Testimonials Section -->
+  <section id="testimonials">
+    <h2>Testimonials</h2>
+    <div class="testimonial-slider" id="testimonialSlider">
+      <div class="testimonial-slide active">
+        <p>"A visionary designer who redefines digital experiences."</p>
+        <h5>- Walubo Jonathan, CEO</h5>
+      </div>
+      <div class="testimonial-slide">
+        <p>"Innovation and excellence in every project. Truly inspiring!"</p>
+        <h5>- Chris Mukisa, system analyst and coder</h5>
+      </div>
+      <div class="testimonial-slide">
+        <p>"Expert craftsmanship with a modern twist. Highly recommended!"</p>
+        <h5>- Alice Johnson, Marketing Director</h5>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Services Section -->
+  <section id="services">
+    <h2>Services</h2>
+    <p>Discover the range of services I offer to drive your digital success.</p>
+    <div class="services-grid">
+      <div class="service-card">
+        <i class="fas fa-palette"></i>
+        <h4>UI/UX Design</h4>
+        <p>Craft visually stunning and intuitive designs that engage users.</p>
+      </div>
+      <div class="service-card">
+        <i class="fas fa-code"></i>
+        <h4>Web Development</h4>
+        <p>Build responsive, fast, and scalable websites using modern technologies.</p>
+      </div>
+      <div class="service-card">
+        <i class="fas fa-mobile-alt"></i>
+        <h4>Mobile Applications</h4>
+        <p>Create cross-platform mobile apps with a focus on performance and elegance.</p>
+      </div>
+      <div class="service-card">
+        <i class="fas fa-rocket"></i>
+        <h4>Digital Strategy</h4>
+        <p>Develop strategic solutions that accelerate growth and brand impact.</p>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Certifications Section -->
+  <section id="certifications">
+    <h2>Certifications</h2>
+    <p>My commitment to excellence is validated by these industry certifications.</p>
+    <div class="certifications-list">
+      <div class="cert-card">
+        <h4>Google Analytics</h4>
+        <p>Certified Digital Analyst</p>
+      </div>
+      <div class="cert-card">
+        <h4>Adobe Certified Expert</h4>
+        <p>Expert in Adobe XD &amp; Photoshop</p>
+      </div>
+      <div class="cert-card">
+        <h4>HubSpot Inbound</h4>
+        <p>Inbound Marketing Certified</p>
+      </div>
+      <div class="cert-card">
+        <h4>Scrum Master</h4>
+        <p>Certified ScrumMaster (CSM)</p>
+      </div>
+    </div>
+  </section>
+  
+  <!-- GitHub Repos Section -->
+  <section id="github-repos">
+    <h2>Latest GitHub Repositories</h2>
+    <p>A glance at my coding projects on GitHub.</p>
+    <div class="repo-grid" id="repoGrid">
+      <!-- Repositories will be injected here dynamically -->
+    </div>
+  </section>
+  
+  <!-- Social Section -->
+  <section id="social">
+    <h2>Social Connections</h2>
+    <p>Let's connect and collaborate!</p>
+    <div class="social-icons">
+      <a href="https://x.com/timolivez12" target="_blank"><i class="fab fa-twitter"></i></a>
+      <a href="https://youtube.com/Tim Olivez" target="_blank"><i class="fab fa-youtube"></i></a>
+      <a href="https://github.com/Timolivez" target="_blank"><i class="fab fa-github"></i></a>
+      <a href="https://tiktok.com/tim olivez" target="_blank"><i class="fab fa-tiktok"></i></a>
+      <a href="https://www.instagram.com/timolivez9" target="_blank"><i class="fab fa-linkedin"></i></a>
+      <a href="https://dribbble.com/timolivez" target="_blank"><i class="fab fa-dribbble"></i></a>
+    </div>
+  </section>
+  
+  <!-- Contact Section -->
+  <section id="contact">
+    <h2>Contact Me</h2>
+    <form class="contact-form">
+      <input type="text" placeholder="Your Name" required>
+      <input type="email" placeholder="Your Email" required>
+      <textarea placeholder="Your Message" rows="5" required></textarea>
+      <button type="submit">Send Message</button>
+    </form>
+  </section>
+  
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2025 TIM OLIVEZ. Crafted with <i class="fas fa-heart"></i> for creative minds.</p>
+  </footer>
+  
+  <!-- ========================== JavaScript ========================== -->
+  <script>
+    /* Radial Navigation */
+    const radialToggle = document.getElementById('radialToggle');
+    const radialItems = document.getElementById('radialItems');
+    let isRadialOpen = false;
+    radialToggle.addEventListener('click', () => {
+      isRadialOpen = !isRadialOpen;
+      if (isRadialOpen) {
+        radialItems.classList.add('open');
+        radialToggle.innerHTML = '<i class="fas fa-times"></i>';
+      } else {
+        radialItems.classList.remove('open');
+        radialToggle.innerHTML = '<i class="fas fa-plus"></i>';
+      }
+    });
+    document.querySelectorAll('.radial-item').forEach(item => {
+      item.addEventListener('click', e => {
+        e.preventDefault();
+        const targetId = item.getAttribute('href').substring(1);
+        scrollToSection(targetId);
+        isRadialOpen = false;
+        radialItems.classList.remove('open');
+        radialToggle.innerHTML = '<i class="fas fa-plus"></i>';
+      });
+    });
+    
+    /* Back-to-Top Button */
+    const backToTop = document.getElementById('backToTop');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 400) {
+        backToTop.classList.add('visible');
+      } else {
+        backToTop.classList.remove('visible');
+      }
+    });
+    backToTop.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+    
+    /* Smooth Scroll Function */
+    function scrollToSection(id) {
+      document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+    }
+    
+    /* Animate Circular Progress Bars in Skills Section */
+    function animateCircularProgress() {
+      const circles = document.querySelectorAll('.circular-progress');
+      circles.forEach(circle => {
+        const percentage = circle.getAttribute('data-percentage');
+        circle.style.background = `conic-gradient(var(--primary) ${percentage * 3.6}deg, #ddd ${percentage * 3.6}deg 360deg)`;
+      });
+    }
+    const skillsSection = document.getElementById('skills');
+    const skillsObserver = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          animateCircularProgress();
+          skillsObserver.unobserve(skillsSection);
+        }
+      });
+    }, { threshold: 0.5 });
+    skillsObserver.observe(skillsSection);
+    
+    /* Testimonial Slider */
+    let testimonialIndex = 0;
+    const testimonials = document.querySelectorAll('#testimonialSlider .testimonial-slide');
+    function showTestimonial(index) {
+      testimonials.forEach((slide, i) => {
+        slide.classList.toggle('active', i === index);
+      });
+    }
+    function nextTestimonial() {
+      testimonialIndex = (testimonialIndex + 1) % testimonials.length;
+      showTestimonial(testimonialIndex);
+    }
+    setInterval(nextTestimonial, 5000);
+    
+    /* Project Search Filter */
+    const projectSearch = document.getElementById('projectSearch');
+    const projectCards = document.querySelectorAll('.project-card');
+    projectSearch.addEventListener('input', () => {
+      const query = projectSearch.value.toLowerCase();
+      projectCards.forEach(card => {
+        const text = card.textContent.toLowerCase();
+        card.style.display = text.includes(query) ? 'block' : 'none';
+      });
+    });
+    
+    /* GitHub Repos Integration */
+    const repoGrid = document.getElementById('repoGrid');
+    fetch('https://api.github.com/users/Timolivez/repos?sort=updated&per_page=6')
+      .then(response => response.json())
+      .then(repos => {
+        repos.forEach(repo => {
+          const repoCard = document.createElement('div');
+          repoCard.className = 'repo-card';
+          repoCard.innerHTML = `
+            <h4>${repo.name}</h4>
+            <p>${repo.description ? repo.description : 'No description provided.'}</p>
+            <a href="${repo.html_url}" target="_blank">View Repo</a>
+          `;
+          repoGrid.appendChild(repoCard);
+        });
+      })
+      .catch(error => {
+        console.error('Error fetching GitHub repos:', error);
+        repoGrid.innerHTML = '<p>Unable to load GitHub repositories at the moment.</p>';
+      });
+  </script>
+</body>
+</html>
